@@ -1,9 +1,12 @@
 #!/bin/bash
 #
-# Script to clean your old branches.
-# This script will filter your branch that already been pushed to remote repository 
-# and now the branch already deleted from remote repository.
+# Script to help you to clean your local branches.
+# This script will filter your branch that already been pushed to remote repository but it's been deleted from remote repository.
 # If you never pushed the branch, it won't be listed and/or deleted by this script.
+#
+# This script also have an option to list all the branches on your local repository,
+# and check for its status, either it's still in remote repository, been deleted from remote repository, or never been pushed to remote.
+# Then, you could select which branches that you want to delete from your local repository.
 #
 
 deleted_only=false
@@ -46,14 +49,13 @@ while getopts ":adh" OPTION; do
   esac
 done
 
-# TODO: wowods balikin git fetch nya
-# echo "Start fetching git..."
-# # Try to run "git fetch", if failed will just stop the process
-# if git fetch -p; then
-#     echo ""
-# else
-#     exit 1
-# fi
+echo "Start fetching git..."
+# Try to run "git fetch", if failed will just stop the process
+if git fetch -p; then
+    echo ""
+else
+    exit 1
+fi
 
 # Based on Bash Checkbox by @HadiDotSh
 # https://github.com/HadiDotSh/bash-checkbox
