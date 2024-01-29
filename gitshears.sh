@@ -1,12 +1,9 @@
 #!/bin/bash
 #
-# Script to help you to clean your local branches.
-# This script will filter your branch that already been pushed to remote repository but it's been deleted from remote repository.
+# Script to clean your old branches.
+# This script will filter your branch that already been pushed to remote repository 
+# and now the branch already deleted from remote repository.
 # If you never pushed the branch, it won't be listed and/or deleted by this script.
-#
-# This script also have an option to list all the branches on your local repository,
-# and check for its status, either it's still in remote repository, been deleted from remote repository, or never been pushed to remote.
-# Then, you could select which branches that you want to delete from your local repository.
 #
 
 deleted_only=false
@@ -183,9 +180,16 @@ read -n 1 -r
 
 if [[ $REPLY =~ ^[Yy]$ ]];then
     printf "\nDeleting selected branch...\n"
-    git branch -D ${branch_name}
+
+    # Remove occurrences of the string
+    selected_branches=$(echo "$branch_name" | sed "s/\[DELETED\] - //g")
+    selected_branches=$(echo "$selected_branches" | sed "s/\[REMOTE\]  - //g")
+    selected_branches=$(echo "$selected_branches" | sed "s/\[LOCAL\]   - //g")
+
+    git branch -D ${selected_branches}
     printf "\e[1;32mDONE!\e[0m"
 else
-    printf "\nAborted."
+    printf "\nProcess is aborted!"
+    printf "\nPlease reply with Y or y if you want to delete the branches that you already selected."
     exit 0
 fi
